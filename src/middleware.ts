@@ -1,21 +1,21 @@
-import { NextResponse } from "next/server";
+import { next } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const token = request.cookies.get("access_token");
   const isDashboard = request.nextUrl.pathname.startsWith("/dashboard");
   const isAuth = request.nextUrl.pathname.startsWith("/login") || 
                  request.nextUrl.pathname.startsWith("/register");
 
   if (isDashboard && !token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return next.redirect(new URL("/login", request.url));
   }
 
   if (isAuth && token) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return next.redirect(new URL("/dashboard", request.url));
   }
 
-  return NextResponse.next();
+  return next.next();
 }
 
 export const config = {
