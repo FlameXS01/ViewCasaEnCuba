@@ -27,7 +27,7 @@ export default function DashboardPropertiesPage() {
           </p>
         </div>
         {isSeller && (
-          <Link href="/dashboard/properties/new">
+          <Link href="/dashboard/my-properties/new">
             <Button>
               <PlusCircle className="h-4 w-4 mr-2" />
               Nueva Propiedad
@@ -44,7 +44,7 @@ export default function DashboardPropertiesPage() {
             No tienes propiedades publicadas
           </p>
           {isSeller && (
-            <Link href="/dashboard/properties/new">
+            <Link href="/dashboard/my-properties/new">
               <Button variant="outline">
                 <PlusCircle className="h-4 w-4 mr-2" />
                 Crear primera propiedad

@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useProperties } from "@/features/properties/hooks";
 import { PropertyCard } from "@/components/property/PropertyCard";
 import { Select } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { PropertyType } from "@/types/enums";
 
 const propertyTypes = [
@@ -19,7 +18,7 @@ const propertyTypes = [
   { value: PropertyType.DUPLEX, label: "Dúplex" },
 ];
 
-export default function PropertiesPage() {
+function PropertiesContent() {
   const searchParams = useSearchParams();
   const { properties, isLoading, error, fetchProperties } = useProperties();
   const [filters, setFilters] = useState({
@@ -44,14 +43,7 @@ export default function PropertiesPage() {
   };
 
   return (
-    <div className="container py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Propiedades</h1>
-        <p className="text-muted-foreground mt-2">
-          Explora todas las propiedades disponibles en Cuba
-        </p>
-      </div>
-
+    <>
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <Select
           options={propertyTypes}
@@ -86,14 +78,29 @@ export default function PropertiesPage() {
           No se encontraron propiedades
         </div>
       ) : (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {properties.map((property) => (
-              <PropertyCard key={property.id} property={property} />
-            ))}
-          </div>
-        </>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {properties.map((property) => (
+            <PropertyCard key={property.id} property={property} />
+          ))}
+        </div>
       )}
+    </>
+  );
+}
+
+export default function PropertiesPage() {
+  return (
+    <div className="container py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">Propiedades</h1>
+        <p className="text-muted-foreground mt-2">
+          Explora todas las propiedades disponibles en Cuba
+        </p>
+      </div>
+
+      <Suspense fallback={<div className="text-center py-8">Cargando...</div>}>
+        <PropertiesContent />
+      </Suspense>
     </div>
   );
 }

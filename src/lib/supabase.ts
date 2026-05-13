@@ -1,18 +1,36 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+let _supabase: SupabaseClient | null = null;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+function getSupabaseClient(): SupabaseClient {
+  if (!_supabase) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error("Supabase credentials not configured");
+    }
+    
+    _supabase = createClient(supabaseUrl, supabaseAnonKey);
+  }
+  return _supabase;
+}
+
+export const supabase = {
+  get storage() {
+    return getSupabaseClient().storage;
+  },
+};
 
 export async function uploadPropertyImage(
   file: File,
   propertyId: string,
   filename: string
 ): Promise<{ url: string; path: string }> {
+  const client = getSupabaseClient();
   const path = `${propertyId}/${filename}`;
 
-  const { error: uploadError } = await supabase.storage
+  const { error: uploadError } = await client.storage
     .from("property-images")
     .upload(path, file, {
       cacheControl: "3600",
@@ -21,7 +39,7 @@ export async function uploadPropertyImage(
 
   if (uploadError) throw uploadError;
 
-  const { data } = supabase.storage
+  const { data } = client.storage
     .from("property-images")
     .getPublicUrl(path);
 
@@ -32,7 +50,8 @@ export async function uploadPropertyImage(
 }
 
 export async function deletePropertyImage(path: string): Promise<void> {
-  const { error } = await supabase.storage
+  const client = getSupabaseClient();
+  const { error } = await client.storage
     .from("property-images")
     .remove([path]);
 

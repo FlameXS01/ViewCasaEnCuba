@@ -9,7 +9,7 @@ export default function DashboardPage() {
   const { user } = useAuthStore();
 
   const stats = [
-    { title: "Propiedades", value: "0", icon: Building, href: "/dashboard/properties" },
+    { title: "Propiedades", value: "0", icon: Building, href: "/dashboard/my-properties" },
     { title: "Visitas", value: "0", icon: Calendar, href: "/dashboard/visits" },
     { title: "Mensajes", value: "0", icon: MessageSquare, href: "/dashboard/messages" },
   ];

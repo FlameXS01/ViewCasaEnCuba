@@ -40,7 +40,7 @@ export function PropertyForm() {
       const property = await createProperty(data);
       setSuccess(true);
       setTimeout(() => {
-        router.push(`/dashboard/properties/${property.id}`);
+        router.push(`/dashboard/my-properties/${property.id}`);
       }, 1500);
     } catch (err) {
       console.error("Error:", err);

@@ -16,7 +16,7 @@ import { useAuthStore } from "@/features/auth/store";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
-  { name: "Mis Propiedades", href: "/dashboard/properties", icon: Building },
+  { name: "Mis Propiedades", href: "/dashboard/my-properties", icon: Building },
   { name: "Visitas", href: "/dashboard/visits", icon: Calendar },
   { name: "Mensajes", href: "/dashboard/messages", icon: MessageSquare },
   { name: "Perfil", href: "/dashboard/profile", icon: User },
@@ -56,7 +56,7 @@ export function Sidebar() {
           })}
           {isSeller && (
             <Link
-              href="/dashboard/properties/new"
+              href="/dashboard/my-properties/new"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             >
               <PlusCircle className="h-5 w-5" />
